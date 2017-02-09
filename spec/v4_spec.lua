@@ -19,7 +19,7 @@ describe("Pass AWSv4 test suite", function()
 	end
 
 	local dir = "./spec/aws4_testsuite/"
-	for i, test_name in ipairs {
+	for _, test_name in ipairs {
 		"get-header-key-duplicate";
 		"get-header-value-order";
 		"get-header-value-trim";
@@ -81,7 +81,7 @@ describe("Pass AWSv4 test suite", function()
 				headers[k:lower()] = v
 			end
 			if body == "" then body = nil end
-			local http_req, interim = awsv4.prepare_request {
+			local _, interim = awsv4.prepare_request {
 				Region = "us-east-1";
 				Service = "host";
 				AccessKey = "AKIDEXAMPLE";
