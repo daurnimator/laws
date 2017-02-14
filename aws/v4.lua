@@ -128,7 +128,7 @@ local function prepare_awsv4_request(tbl)
 		RequestPayloadHash = Hash(RequestPayload or "")
 	end
 	local AccessKey = tbl.AccessKey
-	assert(type(Region) == "string", "bad field 'AccessKey' (string expected)")
+	assert(type(AccessKey) == "string", "bad field 'AccessKey' (string expected)")
 	local SigningKey = tbl.SigningKey
 	assert(type(SigningKey) == "string" or SigningKey == nil, "bad field 'SigningKey' (string or nil expected)")
 	local SecretKey
