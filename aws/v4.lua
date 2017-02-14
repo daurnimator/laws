@@ -36,10 +36,17 @@ local urldecode do
 	end
 end
 
--- Trim 12 from http://lua-users.org/wiki/StringTrim
+-- Based on trim 12 from http://lua-users.org/wiki/StringTrim
 local function Trimall(s)
 	local from = s:match"^%s*()"
-	return from > #s and "" or s:match(".*%S", from)
+	if from > #s then
+		return ""
+	else
+		s = s:match(".*%S", from)
+		-- Condense sequential spaces
+		s = s:gsub("%s+", " ")
+		return s
+	end
 end
 
 local function canonicalise_path(path)
