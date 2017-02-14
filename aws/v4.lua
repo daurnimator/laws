@@ -119,8 +119,14 @@ local function prepare_awsv4_request(tbl)
 	assert(type(CanonicalQueryString) == "string" or CanonicalQueryString == nil, "bad field 'CanonicalQueryString' (string or nil expected)")
 	local req_headers = tbl.headers or {}
 	assert(type(req_headers) == "table", "bad field 'headers' (table or nil expected)")
-	local RequestPayload = tbl.body
-	assert(type(RequestPayload) == "string" or RequestPayload == nil, "bad field 'body' (string or nil expected)")
+	local RequestPayloadHash = tbl.RequestPayloadHash
+	if RequestPayloadHash ~= nil then
+		assert(type(RequestPayloadHash) == "string", "bad field 'RequestPayloadHash' (string or nil expected)")
+	else
+		local RequestPayload = tbl.body
+		assert(type(RequestPayload) == "string" or RequestPayload == nil, "bad field 'body' (string or nil expected)")
+		RequestPayloadHash = Hash(RequestPayload or "")
+	end
 	local AccessKey = tbl.AccessKey
 	assert(type(Region) == "string", "bad field 'AccessKey' (string expected)")
 	local SigningKey = tbl.SigningKey
@@ -204,7 +210,7 @@ local function prepare_awsv4_request(tbl)
 		(CanonicalQueryString or "") .. '\n' ..
 		CanonicalHeaders .. '\n' ..
 		SignedHeaders .. '\n' ..
-		HexEncode(Hash(RequestPayload or ""))
+		HexEncode(RequestPayloadHash)
 	local HashedCanonicalRequest = HexEncode(Hash(CanonicalRequest))
 	-- Task 2: Create a String to Sign for Signature Version 4
 	-- http://docs.aws.amazon.com/general/latest/gr/sigv4-create-string-to-sign.html
